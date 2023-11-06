@@ -1,3 +1,4 @@
+const ESLintPlugin = require("eslint-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
@@ -36,5 +37,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/client/view/index.html",
     }),
+    new ESLintPlugin(),
   ],
 };
