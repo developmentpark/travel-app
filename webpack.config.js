@@ -3,6 +3,13 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
 module.exports = {
+  mode: "development",
+  devServer: {
+    static: "./dist",
+    open: true,
+    hot: true,
+    port: 5050,
+  },
   entry: "./src/client/index.js",
   output: {
     filename: "main.js",
