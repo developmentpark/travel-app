@@ -26,11 +26,11 @@
         </h1>
       </header>
       <main>
-        <section class="plans">
-          <h2 class="plans__title">
-            <i class="fa-solid fa-list-check"></i> My trips
+        <section class="section plans">
+          <h2 class="section__title plans__title">
+            <i class="icon fa-solid fa-list-check"></i>My trips
           </h2>
-          <ul class="plans__list">
+          <ul class="section__content plans__list">
             <div class="item">
               <div class="menu">
                 <i class="menu__btn fa-solid fa-ellipsis-vertical"></i>
@@ -49,17 +49,17 @@
           </ul>
         </section>
 
-        <section class="plan">
-          <div class="plan__title">
+        <section class="section plan">
+          <div class="section__title plan__title">
             <i class="fa-solid fa-passport"></i> My trip
           </div>
 
-          <div class="plan__content">
+          <div class="section__content plan__content">
             <div class="plan__city-country">
               <div class="plan__city">
                 <i class="fa-solid fa-location-dot"></i><span>Paris</span>
               </div>
-              <div class="plan__country">Francia</div>
+              <div class="plan__country">France</div>
             </div>
 
             <div class="plan__departing">
@@ -134,11 +134,9 @@
                   <input class="input" id="departing" type="date" />
                 </div>
               </div>
-              <input
-                type="submit"
-                class="button save-btn"
-                value="Start planning"
-              />
+              <button type="submit" class="button save-btn">
+                Start planning
+              </button>
             </form>
           </div>
         </section>
