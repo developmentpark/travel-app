@@ -3,10 +3,55 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <title>Document</title>
   </head>
   <body>
-    <h1>Hello World</h1>
-    <img src="./assets/alf.png" />
+    <div class="container">
+      <header>
+        <h1 class="logo">
+          <i class="logo__icon fa-solid fa-compass"></i> Travel app
+        </h1>
+      </header>
+      <main>
+        <section class="plans">
+          <h2 class="plans__title">
+            <i class="fa-solid fa-list-check"></i> My trips
+          </h2>
+          <ul class="plans__list">
+            <div class="item">
+              <div class="menu">
+                <i class="menu__btn fa-solid fa-ellipsis-vertical"></i>
+                <div class="menu__content">
+                  <div class="menu__option menu__option_delete">
+                    <i class="fa-solid fa-circle-minus"></i>Delete
+                  </div>
+                </div>
+              </div>
+
+              <div class="item__description">
+                <span class="item__city">Paris</span>, France is
+                <span class="item__time-left">220 days away</span>
+              </div>
+            </div>
+          </ul>
+        </section>
+      </main>
+      <footer>
+        <p>Made with ❤️ by <a href="#">developmentpark</a></p>
+      </footer>
+    </div>
   </body>
 </html>
