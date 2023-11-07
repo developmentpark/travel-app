@@ -1,0 +1,152 @@
+.plan {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  .plan__title {
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .plan__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .plan__city-country {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .plan__city {
+      font-size: 20px;
+      color: $black-color;
+      font-weight: 600;
+      line-height: 0px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .plan__country {
+      font-size: 14px;
+      color: $gray-color_3;
+    }
+  }
+
+  .plan__departing {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    .plan__departing-icon {
+      font-size: 20px;
+      position: relative;
+      top: -2px;
+    }
+
+    .plan__departing-value {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+
+  .image {
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+
+    .image__caption {
+      font-size: 12px;
+      color: $white-color;
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 1;
+    }
+
+    .image__content {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 8px;
+      filter: brightness(0.8);
+      transition:
+        transform 300ms ease-out,
+        filter 300ms ease-out;
+    }
+
+    &:hover .image__content {
+      transform: scale(1.1);
+      filter: brightness(1.1);
+    }
+  }
+}
+
+.weather {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: $gray-color_0;
+  padding: 16px;
+  border-radius: 8px;
+
+  .weather__title {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .weather__content {
+    display: flex;
+    gap: 24px;
+
+    .weather__day-name {
+      font-size: 12px;
+    }
+
+    .weather__day {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .weather__temp {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .weather__grades {
+      font-size: 24px;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.button_secondary {
+  border: solid 1px $primary-color_1;
+  background-color: transparent;
+  border-radius: 8px;
+  width: max-content;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: $primary-color_1;
+
+  &:hover {
+    cursor: pointer;
+    color: $primary-color_2;
+    border-color: $primary-color_2;
+  }
+}
