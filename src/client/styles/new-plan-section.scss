@@ -1,0 +1,46 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+
+  .input-col {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 16px 24px;
+      border-radius: 8px;
+      border: solid 1px $gray-color_1;
+      box-shadow: 1px 2px 12px -2px $gray-color_1;
+    }
+  }
+
+  .save-btn {
+    width: 200px;
+  }
+}
+
+.input-container {
+  .input {
+    border: 0;
+    border-bottom: solid 1px $gray-color_2;
+    padding: 4px;
+    flex: 1;
+    font-size: 16px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .label {
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
