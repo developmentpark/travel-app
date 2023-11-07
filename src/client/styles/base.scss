@@ -26,24 +26,6 @@ h1 {
   font-weight: 600;
 }
 
-header {
-  display: flex;
-  padding: 1rem;
-  border-bottom: 1px solid $gray-color_1;
-  background-color: $black-color;
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    color: $white-color;
-
-    .logo__icon {
-      font-size: 24px;
-    }
-  }
-}
-
 footer {
   display: flex;
   justify-content: center;
