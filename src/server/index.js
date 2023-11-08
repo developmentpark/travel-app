@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 
 const weatherService = require("./weatherService.js");
+const imagesService = require("./ImagesService.js");
 
 const app = express();
 app.use(morgan("combined"));
@@ -17,6 +18,15 @@ app.get("/weather", async (req, res) => {
   }
   const weather = await weatherService.getWeather(city);
   res.json(weather);
+});
+
+app.get("/images", async (req, res) => {
+  const { keyword } = req.query;
+  if (!keyword) {
+    return res.sendStatus(400);
+  }
+  const images = await imagesService.getImages(keyword);
+  res.json(images);
 });
 
 const SERVER_PORT = process.env.SERVER_PORT;
