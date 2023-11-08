@@ -1,15 +1,8 @@
-const geoNamesService = require("./geoNamesService");
-
 const URL_BASE = process.env.WEATHER_URL_BASE;
 const API_KEY = process.env.WEATHER_API_KEY;
 
-async function getWeather(city) {
+async function getWeather({ lat, lng }) {
   try {
-    const geoNamesData = await geoNamesService.getCoordinates(city);
-    if (geoNamesData.status != 200) {
-      return data;
-    }
-    const { lat, lng } = geoNamesData.data.coordinates;
     const url = `${URL_BASE}?lat=${lat}&lon=${lng}&appid=${API_KEY}`;
 
     const res = await fetch(url);
@@ -26,7 +19,7 @@ async function getWeather(city) {
           wind: wind,
         }));
 
-      return { status: res.status, data: { ...weather } };
+      return { status: res.status, data: weather };
     }
     return { status: res.status, message: res.statusText };
   } catch (error) {
