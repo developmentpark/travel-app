@@ -2,8 +2,8 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 
-const weatherService = require("./weatherService.js");
-const imagesService = require("./ImagesService.js");
+const weatherService = require("./api/weatherService.js");
+const imagesService = require("./api/ImagesService.js");
 
 const app = express();
 app.use(morgan("combined"));

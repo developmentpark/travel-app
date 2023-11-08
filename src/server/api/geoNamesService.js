@@ -11,7 +11,7 @@ async function getCoordinates(city) {
     const data = await res.json();
     if (data.totalResultsCount && data.totalResultsCount > 0) {
       const { lat, lng } = data.geonames[0];
-      return { status: 200, coordinates: { lat, lng } };
+      return { status: 200, data: { coordinates: { lat, lng } } };
     }
     return { status: 404 };
   } catch (error) {
