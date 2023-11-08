@@ -8,7 +8,7 @@ app.use(morgan("combined"));
 app.use(express.json());
 app.use(cors());
 app.use(express.static("dist"));
-api.use("/api/v0", api);
+app.use("/api/v0", api);
 
 const SERVER_PORT = process.env.SERVER_PORT;
 const SERVER_HOST = process.env.SERVER_HOST;
