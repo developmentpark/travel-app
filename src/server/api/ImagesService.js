@@ -32,7 +32,7 @@ async function getImages(keyword) {
       tags: image.tags,
     }));
 
-    return { status: 200, data: { images } };
+    return { status: 200, data: images };
   } catch (error) {
     console.log("Error: ", error.message);
     return { status: 500 };
