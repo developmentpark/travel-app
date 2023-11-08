@@ -11,7 +11,7 @@ async function save({ city, departing }) {
     },
     body: JSON.stringify({ city, departing }),
   });
-  const data = await res.json();
+  const { data } = await res.json();
   return data;
 }
 

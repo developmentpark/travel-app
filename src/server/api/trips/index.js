@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
     city,
     country,
     departing,
-    image: images.data,
+    images: images.data,
     weather: weather.data,
   };
   projectData.push(trip);
