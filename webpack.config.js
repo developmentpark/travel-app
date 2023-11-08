@@ -8,7 +8,7 @@ module.exports = {
     static: "./dist",
     open: true,
     hot: true,
-    port: 5050,
+    port: 8081,
   },
   entry: "./src/client/index.js",
   output: {
