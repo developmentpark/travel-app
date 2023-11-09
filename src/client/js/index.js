@@ -1,6 +1,3 @@
-const locationEl = document.querySelector("#location");
-const departingEl = document.querySelector("#departing");
-
 function render(view, data) {
   document.querySelector("main").innerHTML = view(data);
 }
@@ -12,15 +9,16 @@ function kelvinToCelsius(kelvin) {
 function timeLeft(date) {
   const today = Date.now();
   const millisLeft = date - today;
-  if (millisLeft < 0) {
-    return -1;
+  let hoursLeft = 0;
+  if (millisLeft <= 0) {
+    return { unit: "hours", value: hoursLeft };
   }
-  const hoursLeft = Math.round(millisLeft / (1000 * 60 * 60));
-  if (hoursLeft >= 24) {
-    const daysLeft = Math.round(millisLeft / (1000 * 60 * 60 * 24));
-    return { unit: "days", value: daysLeft };
+  hoursLeft = Math.round(millisLeft / (1000 * 60 * 60));
+  if (hoursLeft < 24) {
+    return { unit: "hours", value: hoursLeft };
   }
-  return { unit: "hours", value: hoursLeft };
+  const daysLeft = Math.round(millisLeft / (1000 * 60 * 60 * 24));
+  return { unit: "days", value: daysLeft };
 }
 
 function weatherDayView({ date, icon, temp }) {
@@ -110,15 +108,56 @@ function saveController({ city, departing }) {
     .catch((error) => console.log(error));
 }
 
+function formView() {
+  return `
+    <section class="section new-plan">
+        <div class="section__title">
+        <i class="icon fa-solid fa-suitcase-rolling"></i
+        ><span>New trip</span>
+        </div>
+        <div class="section__content new-plan__content">
+        <form class="form">
+            <div class="input-col">
+            <div class="input-container">
+                <label class="label" for="location">Where to?</label>
+                <input
+                class="input"
+                id="location"
+                type="text"
+                placeholder="e.g. Paris, France"
+                />
+            </div>
+            <div class="input-container">
+                <label class="label" for="departing">When to?</label>
+                <input class="input" id="departing" type="date" />
+            </div>
+            </div>
+            <button id="save-btn" type="submit" class="button save-btn">
+            Start planning
+            </button>
+        </form>
+        </div>
+    </section>
+    `;
+}
+
+function newController() {
+  render(formView);
+}
+
 document.addEventListener("click", (ev) => {
   if (ev.target.matches("button")) {
     ev.preventDefault();
   }
   if (ev.target.matches("#save-btn")) {
+    const locationEl = document.querySelector("#location");
+    const departingEl = document.querySelector("#departing");
     saveController({
       city: locationEl.value,
       departing: departingEl.value.replace(/-/g, "/"),
     });
+  } else if (ev.target.matches("#new-btn")) {
+    newController();
   }
 });
 
