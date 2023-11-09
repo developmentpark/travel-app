@@ -117,3 +117,51 @@ document.addEventListener("click", (ev) => {
     });
   }
 });
+
+function itemView(item) {
+  return `
+    <div class="item">
+        <div class="menu">
+          <i class="menu__btn fa-solid fa-ellipsis-vertical"></i>
+          <div class="menu__content">
+            <div class="menu__option menu__option_delete">
+              <i class="fa-solid fa-circle-minus"></i>Delete
+            </div>
+          </div>
+        </div>
+
+        <div class="item__description">
+          <span class="item__city">${item.city}</span>, ${item.country} is
+          <span class="item__time-left">0 days away</span>
+        </div>
+      </div>
+    `;
+}
+
+function tripListView(list) {
+  return `
+    <section class="section plans">
+    <h2 class="section__title plans__title">
+      <i class="icon fa-solid fa-list-check"></i>My trips
+    </h2>
+    <ul class="section__content plans__list">
+      ${list.map((item) => itemView(item)).join("")}
+    </ul>
+  </section>
+    `;
+}
+
+async function getAll() {
+  const apiUrl = "http://localhost:5050/api/v0/trips";
+  const res = await fetch(apiUrl);
+  const { data } = await res.json();
+  return data;
+}
+
+function indexController() {
+  getAll()
+    .then((data) => render(tripListView, data))
+    .catch((error) => console.log(error));
+}
+
+document.addEventListener("DOMContentLoaded", indexController);
