@@ -26,9 +26,7 @@ function weatherDayView({ date, icon, temp }) {
   return `<div class="weather__day">
       <div class="weather__day-name">${dayName}</div>
       <div class="weather__temp">
-        <div class="weather__icon">
-        <img src="https://openweathermap.org/img/wn/${icon}@2x.png" />
-        </div>
+        <img class="weather__icon" src="https://openweathermap.org/img/wn/${icon}@2x.png" />
         <div class="weather__grades">${kelvinToCelsius(temp)}º</div>
       </div>
     </div>`;
@@ -161,39 +159,38 @@ document.addEventListener("click", (ev) => {
   }
 });
 
-function itemView({ city, country, departing }) {
+function itemView({ id, city, country, departing }) {
   const _timeLeft = timeLeft(new Date(departing));
   const _city = capitalizeFirstLetter(city);
 
   return `
     <div class="item">
-        <div class="menu">
-          <i class="menu__btn fa-solid fa-ellipsis-vertical"></i>
-          <div class="menu__content">
-            <div class="menu__option menu__option_delete">
-              <i class="fa-solid fa-circle-minus"></i>Delete
-            </div>
-          </div>
+        <p class="item__description">
+        <span class="item__city">${_city}</span>, ${country} is
+        <span class="item__time-left">${_timeLeft.value} ${_timeLeft.unit} away</span>
+        </p>
+        <div class="item__actions">
+        <button id="delete-btn" data-id="${id}" class="button button_mini button_delete">
+            <i class="fa-solid fa-circle-minus"></i>Delete
+        </button>
+        <button id="detail-btn" data-id="${id}" class="button button_mini">
+            <i class="fa-solid fa-eye"></i>Details
+        </button>
         </div>
-
-        <div class="item__description">
-          <span class="item__city">${_city}</span>, ${country} is
-          <span class="item__time-left">${_timeLeft.value} ${_timeLeft.unit} away</span>
-        </div>
-      </div>
+    </div>
     `;
 }
 
 function tripListView(list) {
   return `
     <section class="section plans">
-    <h2 class="section__title plans__title">
-      <i class="icon fa-solid fa-list-check"></i>My trips
-    </h2>
-    <ul class="section__content plans__list">
-      ${list.map((item) => itemView(item)).join("")}
-    </ul>
-  </section>
+        <h2 class="section__title plans__title">
+        <i class="icon fa-solid fa-list-check"></i>My trips
+        </h2>
+        <ul class="section__content plans__list">
+            ${list.map((item) => itemView(item)).join("")}
+        </ul>
+    </section>
     `;
 }
 

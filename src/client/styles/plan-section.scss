@@ -2,7 +2,7 @@
   .plan__city-country {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
 
     .plan__city {
       font-size: 20px;
@@ -16,13 +16,14 @@
     .plan__country {
       font-size: 14px;
       color: $gray-color_3;
+      padding-left: 18px;
     }
   }
 
   .plan__departing {
     font-size: 16px;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 4px;
 
     .plan__departing-icon {
@@ -85,22 +86,30 @@
 
   .weather__content {
     display: flex;
+    flex-wrap: wrap;
     gap: 24px;
 
     .weather__day-name {
       font-size: 12px;
+      font-weight: 600;
     }
 
     .weather__day {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 8px;
     }
 
     .weather__temp {
       display: flex;
       gap: 4px;
       align-items: center;
+    }
+
+    .weather__icon {
+      width: 40px;
+      background-color: $primary-color_1;
+      border-radius: 50%;
     }
 
     .weather__grades {
