@@ -14,6 +14,10 @@ const projectData = [
   },
 ];
 
+router.get("/", async (req, res) => {
+  res.json({ status: 200, data: projectData });
+});
+
 router.post("/", async (req, res) => {
   const { city, departing } = req.body;
   if (!city || !departing) {
