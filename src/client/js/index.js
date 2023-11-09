@@ -122,7 +122,10 @@ document.addEventListener("click", (ev) => {
   }
 });
 
-function itemView({ city, country }) {
+function itemView({ city, country, departing }) {
+  const _timeLeft = timeLeft(new Date(departing));
+  const _city = capitalizeFirstLetter(city);
+
   return `
     <div class="item">
         <div class="menu">
@@ -135,8 +138,8 @@ function itemView({ city, country }) {
         </div>
 
         <div class="item__description">
-          <span class="item__city">${city}</span>, ${country} is
-          <span class="item__time-left">0 days away</span>
+          <span class="item__city">${_city}</span>, ${country} is
+          <span class="item__time-left">${_timeLeft.value} ${_timeLeft.unit} away</span>
         </div>
       </div>
     `;
