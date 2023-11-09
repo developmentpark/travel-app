@@ -8,21 +8,24 @@
 
 .item {
   border-radius: 8px;
-  padding: 24px;
+  padding: 24px 20px;
   position: relative;
   border: solid 1px $gray-color_1;
   box-shadow: 1px 2px 12px -2px $gray-color_1;
-  transform: scale(1);
-  transition:
-    transform 100ms ease-out,
-    background-color 100ms linear;
+  transition: background-color 100ms linear;
   color: $gray-color_4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   &:hover {
-    cursor: pointer;
-    transform: scale(1.01);
     box-shadow: 1px 1px 12px -6px $primary-color_1;
     background-color: $white-color;
+  }
+
+  .item__actions {
+    display: flex;
+    gap: 8px;
   }
 
   .item__description {
@@ -36,67 +39,6 @@
 
     &:hover {
       text-decoration: underline;
-    }
-  }
-
-  .menu {
-    position: absolute;
-    right: 0;
-    top: 0;
-    display: flex;
-
-    .menu__btn {
-      padding: 8px 16px;
-      color: $gray-color_5;
-
-      &:hover {
-        cursor: pointer;
-        border-radius: 8px;
-        background-color: $gray-color_1;
-      }
-    }
-
-    &:hover {
-      .menu__content {
-        transform: scaleX(1);
-        visibility: visible;
-      }
-    }
-  }
-}
-
-.menu {
-  .menu__content {
-    position: absolute;
-    top: 0;
-    left: -70px;
-    width: 70px;
-    background-color: $white-color;
-    border: solid 1px $gray-color_1;
-    border-radius: 8px;
-    transform: scaleX(0);
-    transform-origin: 70px;
-    visibility: hidden;
-    transition: transform 80ms ease-out;
-
-    .menu__option {
-      padding: 6px 4px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 2px;
-
-      &:hover {
-        cursor: pointer;
-        background-color: $gray-color_1;
-      }
-
-      &.menu__option_delete {
-        color: $red-color;
-      }
     }
   }
 }

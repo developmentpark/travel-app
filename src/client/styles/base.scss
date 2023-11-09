@@ -94,9 +94,24 @@ a:hover {
   padding: 12px 16px;
   border-radius: 8px;
   box-shadow: 1px 2px 12px -1px $gray-color_2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 
   &:hover {
     cursor: pointer;
     background-color: $primary-color_2;
+  }
+
+  &.button_mini {
+    font-size: 12px;
+    padding: 4px 8px;
+    box-shadow: none;
+  }
+
+  &.button_delete {
+    background-color: transparent;
+    border: solid 1px $red-color;
+    color: $red-color;
   }
 }

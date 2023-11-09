@@ -35,18 +35,17 @@
           </h2>
           <ul class="section__content plans__list">
             <div class="item">
-              <div class="menu">
-                <i class="menu__btn fa-solid fa-ellipsis-vertical"></i>
-                <div class="menu__content">
-                  <div class="menu__option menu__option_delete">
-                    <i class="fa-solid fa-circle-minus"></i>Delete
-                  </div>
-                </div>
-              </div>
-
-              <div class="item__description">
+              <p class="item__description">
                 <span class="item__city">Paris</span>, France is
                 <span class="item__time-left">220 days away</span>
+              </p>
+              <div class="item__actions">
+                <button class="button button_mini button_delete">
+                  <i class="fa-solid fa-circle-minus"></i>Delete
+                </button>
+                <button class="button button_mini">
+                  <i class="fa-solid fa-eye"></i>Details
+                </button>
               </div>
             </div>
           </ul>
@@ -137,7 +136,7 @@
                   <input class="input" id="departing" type="date" />
                 </div>
               </div>
-              <button id="save-btn" type="submit" class="button save-btn">
+              <button id="save-btn" type="submit" class="button">
                 Start planning
               </button>
             </form>
