@@ -1,6 +1,91 @@
 const locationEl = document.querySelector("#location");
 const departingEl = document.querySelector("#departing");
 
+function render(view, data) {
+  document.querySelector("main").innerHTML = view(data);
+}
+
+function kelvinToCelsius(kelvin) {
+  return (kelvin - 273.15).toFixed(2);
+}
+
+function timeLeft(date) {
+  const today = Date.now();
+  const millisLeft = date - today;
+  if (millisLeft < 0) {
+    return -1;
+  }
+  const hoursLeft = Math.round(millisLeft / (1000 * 60 * 60));
+  if (hoursLeft >= 24) {
+    const daysLeft = Math.round(millisLeft / (1000 * 60 * 60 * 24));
+    return { unit: "days", value: daysLeft };
+  }
+  return { unit: "hours", value: hoursLeft };
+}
+
+function weatherDayView({ date, icon, temp }) {
+  const dayName = new Date(date).toLocaleString("en", { weekday: "short" });
+  return `<div class="weather__day">
+      <div class="weather__day-name">${dayName}</div>
+      <div class="weather__temp">
+        <div class="weather__icon">
+        <img src="https://openweathermap.org/img/wn/${icon}@2x.png" />
+        </div>
+        <div class="weather__grades">${kelvinToCelsius(temp)}º</div>
+      </div>
+    </div>`;
+}
+
+function tripView({ images, weather, city, country, departing }) {
+  const imageIdx = Math.floor(Math.random() * images.length);
+  const imageSrc = images[imageIdx].src;
+  const firstTag = images[imageIdx].tags.split(",")[0];
+  const _timeLeft = timeLeft(new Date(departing));
+  const _city = city[0].toUpperCase() + city.slice(1);
+  const tag = firstTag[0].toUpperCase() + firstTag.slice(1);
+
+  return `
+        <section class="section plan">
+        <div class="section__title plan__title">
+          <i class="fa-solid fa-passport"></i> My trip
+        </div>
+        <div class="section__content plan__content">
+          <div class="plan__city-country">
+            <div class="plan__city">
+              <i class="fa-solid fa-location-dot"></i><span>${_city}</span>
+            </div>
+            <div class="plan__country">${country}</div>
+          </div>
+          <div class="plan__departing">
+            <i class="plan__departing-icon fa-regular fa-calendar-days"></i>
+            <span class="plan__departing-value">${_timeLeft.value} ${
+              _timeLeft.unit
+            }</span
+            ><span>left until departure</span>
+          </div>
+          <div class="image">
+            <div class="image__caption">${tag}</div>
+            <img
+              class="image__content"
+              src="${imageSrc}"
+              alt="${tag}"
+            />
+          </div>
+          <div class="weather">
+            <div class="weather__title">Weather</div>
+            <div class="weather__content">
+            ${weather
+              .map(({ date, icon, temp }) =>
+                weatherDayView({ date, icon, temp }),
+              )
+              .join("")}
+            </div>
+          </div>
+        </div>
+      </section>
+        `;
+}
+
 async function save({ city, departing }) {
   const apiUrl = "http://localhost:5050/api/v0/trips";
   const res = await fetch(apiUrl, {
@@ -17,7 +102,7 @@ async function save({ city, departing }) {
 
 function saveController({ city, departing }) {
   save({ city, departing })
-    .then((data) => console.log(data))
+    .then((data) => render(tripView, data))
     .catch((error) => console.log(error));
 }
 
@@ -28,7 +113,7 @@ document.addEventListener("click", (ev) => {
   if (ev.target.matches("#save-btn")) {
     saveController({
       city: locationEl.value,
-      departing: departingEl.value,
+      departing: departingEl.value.replace(/-/g, "/"),
     });
   }
 });
