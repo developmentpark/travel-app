@@ -36,13 +36,17 @@ function weatherDayView({ date, icon, temp }) {
     </div>`;
 }
 
+function capitalizeFirstLetter(word) {
+  return word[0].toUpperCase() + word.slice(1);
+}
+
 function tripView({ images, weather, city, country, departing }) {
   const imageIdx = Math.floor(Math.random() * images.length);
   const imageSrc = images[imageIdx].src;
   const firstTag = images[imageIdx].tags.split(",")[0];
   const _timeLeft = timeLeft(new Date(departing));
-  const _city = city[0].toUpperCase() + city.slice(1);
-  const tag = firstTag[0].toUpperCase() + firstTag.slice(1);
+  const _city = capitalizeFirstLetter(city);
+  const tag = capitalizeFirstLetter(firstTag);
 
   return `
         <section class="section plan">
@@ -118,7 +122,7 @@ document.addEventListener("click", (ev) => {
   }
 });
 
-function itemView(item) {
+function itemView({ city, country }) {
   return `
     <div class="item">
         <div class="menu">
@@ -131,7 +135,7 @@ function itemView(item) {
         </div>
 
         <div class="item__description">
-          <span class="item__city">${item.city}</span>, ${item.country} is
+          <span class="item__city">${city}</span>, ${country} is
           <span class="item__time-left">0 days away</span>
         </div>
       </div>
