@@ -143,6 +143,33 @@ function newController() {
   render(formView);
 }
 
+async function deleteTrip(id) {
+  const apiUrl = `http://localhost:5050/api/v0/trips/${id}`;
+  await fetch(apiUrl, {
+    method: "DELETE",
+    credentials: "same-origin",
+  });
+}
+
+function deleteController(id) {
+  deleteTrip(id)
+    .then(() => indexController())
+    .catch((error) => console.log(error));
+}
+
+async function getTrip(id) {
+  const apiUrl = `http://localhost:5050/api/v0/trips/${id}`;
+  const res = await fetch(apiUrl);
+  const { data } = await res.json();
+  return data;
+}
+
+function detailController(id) {
+  getTrip(id)
+    .then((data) => render(tripView, data))
+    .catch((error) => console.log(error));
+}
+
 document.addEventListener("click", (ev) => {
   if (ev.target.matches("button")) {
     ev.preventDefault();
@@ -156,6 +183,10 @@ document.addEventListener("click", (ev) => {
     });
   } else if (ev.target.matches("#new-btn")) {
     newController();
+  } else if (ev.target.matches("#delete-btn")) {
+    deleteController(ev.target.dataset.id);
+  } else if (ev.target.matches("#detail-btn")) {
+    detailController(ev.target.dataset.id);
   }
 });
 
