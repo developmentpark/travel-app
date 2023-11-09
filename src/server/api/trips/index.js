@@ -18,6 +18,35 @@ router.get("/", async (req, res) => {
   res.json({ status: 200, data: projectData });
 });
 
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.sendStatus(400);
+  }
+  const tripIdx = projectData.findIndex((item) => item.id == id);
+  const found = tripIdx != -1;
+  if (found) {
+    res.json({ status: 200, data: projectData[tripIdx] });
+  } else {
+    res.sendStatus(404);
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.sendStatus(400);
+  }
+  const tripIdx = projectData.findIndex((item) => item.id == id);
+  const found = tripIdx != -1;
+  if (found) {
+    projectData.splice(tripIdx, 1);
+    res.sendStatus(204);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
 router.post("/", async (req, res) => {
   const { city, departing } = req.body;
   if (!city || !departing) {
