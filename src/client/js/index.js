@@ -45,6 +45,9 @@ function tripView({ images, weather, city, country, departing }) {
   const tag = capitalizeFirstLetter(firstTag);
 
   return `
+        <section class="section">
+        <button id="back-btn" class="button button_secondary"><i class="fa-solid fa-arrow-left"></i>Back</button>
+        </section>
         <section class="section plan">
         <div class="section__title plan__title">
           <i class="fa-solid fa-passport"></i> My trip
@@ -108,6 +111,9 @@ function saveController({ city, departing }) {
 
 function formView() {
   return `
+  <section class="section">
+  <button id="back-btn" class="button button_secondary"><i class="fa-solid fa-arrow-left"></i>Back</button>
+  </section>
     <section class="section new-plan">
         <div class="section__title">
         <i class="icon fa-solid fa-suitcase-rolling"></i
