@@ -193,6 +193,8 @@ document.addEventListener("click", (ev) => {
     deleteController(ev.target.dataset.id);
   } else if (ev.target.matches("#detail-btn")) {
     detailController(ev.target.dataset.id);
+  } else if (ev.target.matches("#back-btn")) {
+    indexController();
   }
 });
 
