@@ -249,45 +249,72 @@ document.addEventListener("click", (ev) => {
   }
 });
 
-function itemView({ id, city, country, departing }) {
-  const _timeLeft = timeLeft(new Date(departing));
-  const _city = capitalizeFirstLetter(city);
-
-  return `
-    <div class="item">
-        <p class="item__description">
-        <span class="item__city">${_city}</span>, ${country} is
-        <span class="item__time-left">${_timeLeft.value} ${_timeLeft.unit} away</span>
-        </p>
+class ItemView {
+  constructor() {
+    this.template = $(`
+      <div class="item">
+        <p class="item__description"></p>
         <div class="item__actions">
-        <button id="delete-btn" data-id="${id}" class="button button_mini button_delete">
+        <button id="delete-btn" class="button button_mini button_delete">
             <i class="fa-solid fa-circle-minus"></i>Delete
         </button>
-        <button id="detail-btn" data-id="${id}" class="button button_mini">
+        <button id="detail-btn" class="button button_mini">
             <i class="fa-solid fa-eye"></i>Details
         </button>
         </div>
-    </div>
-    `;
+      </div>`);
+
+    this.description = this.template.find(".item__description");
+    this.deleteBtn = this.template.find(".delete-btn");
+    this.detailBtn = this.template.find(".detail-btn");
+
+    this.deleteBtn.click(function (ev) {
+      deleteController(ev.target.dataset.id);
+    });
+
+    this.detailBtn.click(function (ev) {
+      detailController(ev.target.dataset.id);
+    });
+  }
+
+  render(root, { id, city, country, departing }) {
+    const _timeLeft = timeLeft(new Date(departing));
+    const _city = capitalizeFirstLetter(city);
+
+    this.description
+      .html(`<span class="item__city">${_city}</span>, ${country} is
+    <span class="item__time-left">${_timeLeft.value} ${_timeLeft.unit} away</span>`);
+
+    this.deleteBtn.attr("data-id", id);
+    this.detailBtn.attr("data-id", id);
+
+    root.append(this.template);
+  }
 }
 
-function tripListView(list) {
-  return `
+class TripListView {
+  constructor() {
+    this.template = $(`
     <section class="section plans">
-        <h2 class="section__title plans__title">
-        <i class="icon fa-solid fa-list-check"></i>My trips
-        </h2>
-        <ul class="section__content plans__list">
-            ${list.map((item) => itemView(item)).join("")}
-        </ul>
-    </section>
-    `;
+      <h2 class="section__title plans__title">
+      <i class="icon fa-solid fa-list-check"></i>My trips
+      </h2>
+      <ul class="section__content plans__list"></ul>
+    </section>`);
+
+    this.planList = this.template.find(".plans_list");
+  }
+
+  render(list) {
+    list.forEach((item) => new ItemView().render(this.planList, item));
+    $("main").html(this.template);
+  }
 }
 
 function indexController() {
   httpService
     .getAll()
-    .then((data) => render(tripListView, data))
+    .then((data) => new TripListView().render(data))
     .catch((error) => console.log(error));
 }
 
