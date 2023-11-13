@@ -1,3 +1,5 @@
+import { httpService } from "./httpService";
+
 function render(view, data) {
   document.querySelector("main").innerHTML = view(data);
 }
@@ -89,22 +91,9 @@ function tripView({ images, weather, city, country, departing }) {
         `;
 }
 
-async function save({ city, departing }) {
-  const apiUrl = "http://localhost:5050/api/v0/trips";
-  const res = await fetch(apiUrl, {
-    method: "POST",
-    credentials: "same-origin",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify({ city, departing }),
-  });
-  const { data } = await res.json();
-  return data;
-}
-
 function saveController({ city, departing }) {
-  save({ city, departing })
+  httpService
+    .save({ city, departing })
     .then((data) => render(tripView, data))
     .catch((error) => console.log(error));
 }
@@ -167,29 +156,16 @@ function newController() {
   new FormView().render();
 }
 
-async function deleteTrip(id) {
-  const apiUrl = `http://localhost:5050/api/v0/trips/${id}`;
-  await fetch(apiUrl, {
-    method: "DELETE",
-    credentials: "same-origin",
-  });
-}
-
 function deleteController(id) {
-  deleteTrip(id)
+  httpService
+    .deleteTrip(id)
     .then(() => indexController())
     .catch((error) => console.log(error));
 }
 
-async function getTrip(id) {
-  const apiUrl = `http://localhost:5050/api/v0/trips/${id}`;
-  const res = await fetch(apiUrl);
-  const { data } = await res.json();
-  return data;
-}
-
 function detailController(id) {
-  getTrip(id)
+  httpService
+    .getTrip(id)
     .then((data) => render(tripView, data))
     .catch((error) => console.log(error));
 }
@@ -244,15 +220,9 @@ function tripListView(list) {
     `;
 }
 
-async function getAll() {
-  const apiUrl = "http://localhost:5050/api/v0/trips";
-  const res = await fetch(apiUrl);
-  const { data } = await res.json();
-  return data;
-}
-
 function indexController() {
-  getAll()
+  httpService
+    .getAll()
     .then((data) => render(tripListView, data))
     .catch((error) => console.log(error));
 }
