@@ -23,31 +23,42 @@ function timeLeft(date) {
   return { unit: "days", value: daysLeft };
 }
 
-function weatherDayView({ date, icon, temp }) {
-  const dayName = new Date(date).toLocaleString("en", { weekday: "short" });
-  return `<div class="weather__day">
-      <div class="weather__day-name">${dayName}</div>
+class WeatherDayView {
+  constructor() {
+    this.template = $(`<div class="weather__day">
+      <div class="weather__day-name"></div>
       <div class="weather__temp">
-        <img class="weather__icon" src="https://openweathermap.org/img/wn/${icon}@2x.png" />
-        <div class="weather__grades">${kelvinToCelsius(temp)}º</div>
+        <img class="weather__icon"/>
+        <div class="weather__grades"></div>
       </div>
-    </div>`;
+    </div>`);
+
+    this.weatherDayName = this.template.find(".weather__day-name");
+    this.weatherIcon = this.template.find(".weather__icon");
+    this.weatherGrader = this.template.find(".weather__grades");
+  }
+
+  render(root, { date, icon, temp }) {
+    const dayName = new Date(date).toLocaleString("en", { weekday: "short" });
+    this.weatherDayName.text(dayName);
+    this.weatherIcon.attr(
+      "src",
+      `https://openweathermap.org/img/wn/${icon}@2x.png`,
+    );
+    this.weatherGrader.text(`${kelvinToCelsius(temp)}º`);
+
+    root.append(this.template);
+  }
 }
 
 function capitalizeFirstLetter(word) {
   return word[0].toUpperCase() + word.slice(1);
 }
 
-function tripView({ images, weather, city, country, departing }) {
-  const imageIdx = Math.floor(Math.random() * images.length);
-  const imageSrc = images[imageIdx].src;
-  const firstTag = images[imageIdx].tags.split(",")[0];
-  const _timeLeft = timeLeft(new Date(departing));
-  const _city = capitalizeFirstLetter(city);
-  const tag = capitalizeFirstLetter(firstTag);
-
-  return `
-        <section class="section">
+class TripView {
+  constructor() {
+    this.template = $(`
+      <section class="section">
         <button id="back-btn" class="button button_secondary"><i class="fa-solid fa-arrow-left"></i>Back</button>
         </section>
         <section class="section plan">
@@ -57,44 +68,97 @@ function tripView({ images, weather, city, country, departing }) {
         <div class="section__content plan__content">
           <div class="plan__city-country">
             <div class="plan__city">
-              <i class="fa-solid fa-location-dot"></i><span>${_city}</span>
             </div>
-            <div class="plan__country">${country}</div>
+            <div class="plan__country"></div>
           </div>
           <div class="plan__departing">
             <i class="plan__departing-icon fa-regular fa-calendar-days"></i>
-            <span class="plan__departing-value">${_timeLeft.value} ${
-              _timeLeft.unit
-            }</span
+            <span class="plan__departing-value"></span
             ><span>left until departure</span>
           </div>
           <div class="image">
-            <div class="image__caption">${tag}</div>
+            <div class="image__caption"></div>
             <img
               class="image__content"
-              src="${imageSrc}"
-              alt="${tag}"
             />
           </div>
           <div class="weather">
             <div class="weather__title">Weather</div>
-            <div class="weather__content">
-            ${weather
-              .map(({ date, icon, temp }) =>
-                weatherDayView({ date, icon, temp }),
-              )
-              .join("")}
-            </div>
+            <div class="weather__content"></div>
           </div>
         </div>
       </section>
-        `;
+    `);
+
+    this.weatherContentEl = this.template.find(".weather__content");
+    this.imageContentEl = this.template.find(".image__content");
+    this.imageCaptionEl = this.template.find(".image__caption");
+    this.planDepartingValueEl = this.template.find(".plan__departing-value");
+    this.planCountryEl = this.template.find(".plan__country");
+    this.planCityEl = this.template.find(".plan__city");
+  }
+
+  render({ images, weather, city, country, departing }) {
+    const _city = capitalizeFirstLetter(city);
+    this.planCityEl.html(
+      `<i class="fa-solid fa-location-dot"></i><span>${_city}</span>`,
+    );
+
+    this.planCountryEl.text(country);
+
+    const _timeLeft = timeLeft(new Date(departing));
+    this.planDepartingValueEl.text(`${_timeLeft.value} ${_timeLeft.unit}`);
+
+    const tag = capitalizeFirstLetter(firstTag);
+    this.imageCaptionEl.text(tag);
+
+    const imageIdx = Math.floor(Math.random() * images.length);
+    const imageSrc = images[imageIdx].src;
+    this.imageContentEl.attr("src", imageSrc);
+    this.imageContentEl.attr("alt", tag);
+
+    weather.forEach(({ date, icon, temp }) =>
+      new WeatherDayView().render(this.weatherContentEl, { date, icon, temp }),
+    );
+
+    $("main").html(this.template);
+  }
 }
+
+class WeatherDayView {
+  constructor() {
+    this.template = $(`<div class="weather__day">
+      <div class="weather__day-name"></div>
+      <div class="weather__temp">
+        <img class="weather__icon"/>
+        <div class="weather__grades"></div>
+      </div>
+    </div>`);
+
+    this.weatherDayName = this.template.find(".weather__day-name");
+    this.weatherIcon = this.template.find(".weather__icon");
+    this.weatherGrader = this.template.find(".weather__grades");
+  }
+
+  render(root, { date, icon, temp }) {
+    const dayName = new Date(date).toLocaleString("en", { weekday: "short" });
+    this.weatherDayName.text(dayName);
+    this.weatherIcon.attr(
+      "src",
+      `https://openweathermap.org/img/wn/${icon}@2x.png`,
+    );
+    this.weatherGrader.text(`${kelvinToCelsius(temp)}º`);
+
+    root.append(this.template);
+  }
+}
+
+const tripView = new TripView();
 
 function saveController({ city, departing }) {
   httpService
     .save({ city, departing })
-    .then((data) => render(tripView, data))
+    .then((data) => tripView.render(data))
     .catch((error) => console.log(error));
 }
 
@@ -166,7 +230,7 @@ function deleteController(id) {
 function detailController(id) {
   httpService
     .getTrip(id)
-    .then((data) => render(tripView, data))
+    .then((data) => tripView.render(data))
     .catch((error) => console.log(error));
 }
 
