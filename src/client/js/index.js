@@ -1,8 +1,5 @@
+import TripListView from "../view/TripListView";
 import { httpService } from "./httpService";
-
-function render(view, data) {
-  document.querySelector("main").innerHTML = view(data);
-}
 
 function kelvinToCelsius(kelvin) {
   return (kelvin - 273.15).toFixed(2);
@@ -56,7 +53,8 @@ function capitalizeFirstLetter(word) {
 }
 
 class TripView {
-  constructor() {
+  constructor(controller) {
+    this.controller = controller;
     this.template = $(`
       <section class="section">
         <button id="back-btn" class="button button_secondary"><i class="fa-solid fa-arrow-left"></i>Back</button>
@@ -98,7 +96,7 @@ class TripView {
     this.planCityEl = this.template.find(".plan__city");
     this.backBtn = this.template.find("#back-btn");
     this.backBtn.click(function () {
-      indexController();
+      controller.index();
     });
   }
 
@@ -129,45 +127,9 @@ class TripView {
   }
 }
 
-class WeatherDayView {
-  constructor() {
-    this.template = $(`<div class="weather__day">
-      <div class="weather__day-name"></div>
-      <div class="weather__temp">
-        <img class="weather__icon"/>
-        <div class="weather__grades"></div>
-      </div>
-    </div>`);
-
-    this.weatherDayName = this.template.find(".weather__day-name");
-    this.weatherIcon = this.template.find(".weather__icon");
-    this.weatherGrader = this.template.find(".weather__grades");
-  }
-
-  render(root, { date, icon, temp }) {
-    const dayName = new Date(date).toLocaleString("en", { weekday: "short" });
-    this.weatherDayName.text(dayName);
-    this.weatherIcon.attr(
-      "src",
-      `https://openweathermap.org/img/wn/${icon}@2x.png`,
-    );
-    this.weatherGrader.text(`${kelvinToCelsius(temp)}º`);
-
-    root.append(this.template);
-  }
-}
-
-const tripView = new TripView();
-
-function saveController({ city, departing }) {
-  httpService
-    .save({ city, departing })
-    .then((data) => tripView.render(data))
-    .catch((error) => console.log(error));
-}
-
 class FormView {
-  constructor() {
+  constructor(controller) {
+    this.controller = controller;
     this.template = $(`
     <section class="section">
     <button id="back-btn" class="button button_secondary"><i class="fa-solid fa-arrow-left"></i>Back</button>
@@ -208,7 +170,7 @@ class FormView {
     this.saveBtn = this.template.find("#save-btn");
     const self = this;
     this.saveBtn.click(function () {
-      saveController({
+      controller.saveTrip({
         city: self.locationEl.val(),
         departing: self.departingEl.val().replace(/-/g, "/"),
       });
@@ -220,87 +182,62 @@ class FormView {
   }
 }
 
-function newController() {
-  new FormView().render();
-}
-
-function deleteController(id) {
-  httpService
-    .deleteTrip(id)
-    .then(() => indexController())
-    .catch((error) => console.log(error));
-}
-
-function detailController(id) {
-  httpService
-    .getTrip(id)
-    .then((data) => tripView.render(data))
-    .catch((error) => console.log(error));
-}
-
 document.addEventListener("click", (ev) => {
   if (ev.target.matches("button")) {
     ev.preventDefault();
   }
 });
 
-class ItemView {
+class Controller {
   constructor() {
-    this.template = $(`
-      <div class="item">
-        <p class="item__description"></p>
-        <div class="item__actions">
-        <button id="delete-btn" class="button button_mini button_delete">
-            <i class="fa-solid fa-circle-minus"></i>Delete
-        </button>
-        <button id="detail-btn" class="button button_mini">
-            <i class="fa-solid fa-eye"></i>Details
-        </button>
-        </div>
-      </div>`);
-
-    this.description = this.template.find(".item__description");
-    this.deleteBtn = this.template.find("#delete-btn");
-    this.detailBtn = this.template.find("#detail-btn");
-
-    this.deleteBtn.click(function (ev) {
-      deleteController(ev.target.dataset.id);
-    });
-
-    this.detailBtn.click(function (ev) {
-      detailController(ev.target.dataset.id);
-    });
+    this.tripListView = new TripListView(this);
+    this.formView = new FormView(this);
+    this.tripView = new TripView(this);
+    this.index();
   }
-
-  render(root, { id, city, country, departing }) {
-    const _timeLeft = timeLeft(new Date(departing));
-    const _city = capitalizeFirstLetter(city);
-
-    this.description
-      .html(`<span class="item__city">${_city}</span>, ${country} is
-    <span class="item__time-left">${_timeLeft.value} ${_timeLeft.unit} away</span>`);
-
-    this.deleteBtn.attr("data-id", id);
-    this.detailBtn.attr("data-id", id);
-
-    root.append(this.template);
+  index() {
+    httpService
+      .getAll()
+      .then((data) => this.tripListView.render(data))
+      .catch((error) => console.log(error));
+  }
+  detailTrip(id) {
+    httpService
+      .getTrip(id)
+      .then((data) => this.tripView.render(data))
+      .catch((error) => console.log(error));
+  }
+  newTrip() {
+    this.formView.render();
+  }
+  deleteTrip(id) {
+    httpService
+      .deleteTrip(id)
+      .then(() => this.init())
+      .catch((error) => console.log(error));
+  }
+  saveTrip({ city, departing }) {
+    httpService
+      .save({ city, departing })
+      .then((data) => tripView.render(data))
+      .catch((error) => console.log(error));
   }
 }
 
 class TripListView {
   constructor() {
     this.template = $(`
-    <section class="section plans">
-      <h2 class="section__title plans__title">
-      <i class="icon fa-solid fa-list-check"></i>My trips
-      </h2>
-      <ul class="section__content plans__list"></ul>
-    </section>`);
+      <section class="section plans">
+        <h2 class="section__title plans__title">
+        <i class="icon fa-solid fa-list-check"></i>My trips
+        </h2>
+        <ul class="section__content plans__list"></ul>
+      </section>`);
 
     this.planList = this.template.find(".plans_list");
 
     $("#new-btn").click(function () {
-      newController();
+      controller.newTrip();
     });
   }
 
@@ -310,11 +247,48 @@ class TripListView {
   }
 }
 
-function indexController() {
-  httpService
-    .getAll()
-    .then((data) => new TripListView().render(data))
-    .catch((error) => console.log(error));
+class ItemView {
+  constructor(controller) {
+    this.controller = controller;
+    this.template = $(`
+        <div class="item">
+          <p class="item__description"></p>
+          <div class="item__actions">
+          <button id="delete-btn" class="button button_mini button_delete">
+              <i class="fa-solid fa-circle-minus"></i>Delete
+          </button>
+          <button id="detail-btn" class="button button_mini">
+              <i class="fa-solid fa-eye"></i>Details
+          </button>
+          </div>
+        </div>`);
+
+    this.description = this.template.find(".item__description");
+    this.deleteBtn = this.template.find("#delete-btn");
+    this.detailBtn = this.template.find("#detail-btn");
+
+    this.deleteBtn.click(function (ev) {
+      controller.deleteTrip(ev.target.dataset.id);
+    });
+
+    this.detailBtn.click(function (ev) {
+      controller.detailTrip(ev.target.dataset.id);
+    });
+  }
+
+  render(root, { id, city, country, departing }) {
+    const _timeLeft = timeLeft(new Date(departing));
+    const _city = capitalizeFirstLetter(city);
+
+    this.description
+      .html(`<span class="item__city">${_city}</span>, ${country} is
+      <span class="item__time-left">${_timeLeft.value} ${_timeLeft.unit} away</span>`);
+
+    this.deleteBtn.attr("data-id", id);
+    this.detailBtn.attr("data-id", id);
+
+    root.append(this.template);
+  }
 }
 
-document.addEventListener("DOMContentLoaded", indexController);
+document.addEventListener("DOMContentLoaded", new Controller());
