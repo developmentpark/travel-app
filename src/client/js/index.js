@@ -242,9 +242,6 @@ document.addEventListener("click", (ev) => {
   if (ev.target.matches("button")) {
     ev.preventDefault();
   }
-  if (ev.target.matches("#new-btn")) {
-    newController();
-  }
 });
 
 class ItemView {
@@ -263,8 +260,8 @@ class ItemView {
       </div>`);
 
     this.description = this.template.find(".item__description");
-    this.deleteBtn = this.template.find(".delete-btn");
-    this.detailBtn = this.template.find(".detail-btn");
+    this.deleteBtn = this.template.find("#delete-btn");
+    this.detailBtn = this.template.find("#detail-btn");
 
     this.deleteBtn.click(function (ev) {
       deleteController(ev.target.dataset.id);
@@ -301,6 +298,10 @@ class TripListView {
     </section>`);
 
     this.planList = this.template.find(".plans_list");
+
+    $("#new-btn").click(function () {
+      newController();
+    });
   }
 
   render(list) {
