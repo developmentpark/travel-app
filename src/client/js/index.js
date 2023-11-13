@@ -96,6 +96,10 @@ class TripView {
     this.planDepartingValueEl = this.template.find(".plan__departing-value");
     this.planCountryEl = this.template.find(".plan__country");
     this.planCityEl = this.template.find(".plan__city");
+    this.backBtn = this.template.find("#back-btn");
+    this.backBtn.click(function () {
+      indexController();
+    });
   }
 
   render({ images, weather, city, country, departing }) {
@@ -240,12 +244,6 @@ document.addEventListener("click", (ev) => {
   }
   if (ev.target.matches("#new-btn")) {
     newController();
-  } else if (ev.target.matches("#delete-btn")) {
-    deleteController(ev.target.dataset.id);
-  } else if (ev.target.matches("#detail-btn")) {
-    detailController(ev.target.dataset.id);
-  } else if (ev.target.matches("#back-btn")) {
-    indexController();
   }
 });
 
