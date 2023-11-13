@@ -163,45 +163,8 @@ class FormView {
   }
 }
 
-/* function formView() {
-  return `
-  <section class="section">
-  <button id="back-btn" class="button button_secondary"><i class="fa-solid fa-arrow-left"></i>Back</button>
-  </section>
-    <section class="section new-plan">
-        <div class="section__title">
-        <i class="icon fa-solid fa-suitcase-rolling"></i
-        ><span>New trip</span>
-        </div>
-        <div class="section__content new-plan__content">
-        <form class="form">
-            <div class="input-col">
-            <div class="input-container">
-                <label class="label" for="location">Where to?</label>
-                <input
-                class="input"
-                id="location"
-                type="text"
-                placeholder="e.g. Paris, France"
-                />
-            </div>
-            <div class="input-container">
-                <label class="label" for="departing">When to?</label>
-                <input class="input" id="departing" type="date" />
-            </div>
-            </div>
-            <button id="save-btn" type="submit" class="button save-btn">
-            Start planning
-            </button>
-        </form>
-        </div>
-    </section>
-    `;
-} */
-
 function newController() {
   new FormView().render();
-  /* render(formView); */
 }
 
 async function deleteTrip(id) {
@@ -235,14 +198,7 @@ document.addEventListener("click", (ev) => {
   if (ev.target.matches("button")) {
     ev.preventDefault();
   }
-  /* if (ev.target.matches("#save-btn")) {
-    const locationEl = document.querySelector("#location");
-    const departingEl = document.querySelector("#departing");
-    saveController({
-      city: locationEl.value,
-      departing: departingEl.value.replace(/-/g, "/"),
-    });
-  } else */ if (ev.target.matches("#new-btn")) {
+  if (ev.target.matches("#new-btn")) {
     newController();
   } else if (ev.target.matches("#delete-btn")) {
     deleteController(ev.target.dataset.id);
