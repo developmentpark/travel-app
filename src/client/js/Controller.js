@@ -8,7 +8,6 @@ export default class Controller {
     this.tripListView = new TripListView(this);
     this.formView = new FormView(this);
     this.tripView = new TripView(this);
-    this.index();
   }
   index() {
     httpService
@@ -25,6 +24,7 @@ export default class Controller {
   newTrip() {
     this.formView.render();
   }
+
   deleteTrip(id) {
     httpService
       .deleteTrip(id)

@@ -43,10 +43,6 @@ export default class TripView {
     this.planDepartingValueEl = this.template.find(".plan__departing-value");
     this.planCountryEl = this.template.find(".plan__country");
     this.planCityEl = this.template.find(".plan__city");
-    this.backBtn = this.template.find("#back-btn");
-    this.backBtn.click(function () {
-      this.controller.index();
-    });
   }
 
   render({ images, weather, city, country, departing }) {
@@ -60,14 +56,16 @@ export default class TripView {
     const _timeLeft = timeLeft(new Date(departing));
     this.planDepartingValueEl.text(`${_timeLeft.value} ${_timeLeft.unit}`);
 
-    const tag = capitalizeFirstLetter(firstTag);
-    this.imageCaptionEl.text(tag);
-
     const imageIdx = Math.floor(Math.random() * images.length);
     const imageSrc = images[imageIdx].src;
     this.imageContentEl.attr("src", imageSrc);
+
+    const firstTag = images[imageIdx].tags.split(",")[0];
+    const tag = capitalizeFirstLetter(firstTag);
+    this.imageCaptionEl.text(tag);
     this.imageContentEl.attr("alt", tag);
 
+    this.weatherContentEl.empty();
     weather.forEach(({ date, icon, temp }) =>
       new WeatherDayView().render(this.weatherContentEl, { date, icon, temp }),
     );

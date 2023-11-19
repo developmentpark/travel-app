@@ -3,7 +3,7 @@ export default class FormView {
     this.controller = controller;
     this.template = $(`
     <section class="section">
-    <button id="back-btn" class="button button_secondary"><i class="fa-solid fa-arrow-left"></i>Back</button>
+    <button id="back-btn" class="button button_secondary back-btnx"><i class="fa-solid fa-arrow-left"></i>Back</button>
     </section>
       <section class="section new-plan">
           <div class="section__title">
@@ -38,13 +38,17 @@ export default class FormView {
     this.locationEl = this.template.find("#location");
     this.departingEl = this.template.find("#departing");
 
-    this.saveBtn = this.template.find("#save-btn");
     const self = this;
-    this.saveBtn.click(function () {
-      this.controller.saveTrip({
+    $(document).on("click", "#save-btn", function (ev) {
+      ev.preventDefault();
+      self.controller.saveTrip({
         city: self.locationEl.val(),
         departing: self.departingEl.val().replace(/-/g, "/"),
       });
+    });
+
+    $(document).on("click", "#back-btn", function () {
+      self.controller.index();
     });
   }
 

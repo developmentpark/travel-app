@@ -1,3 +1,5 @@
 import Controller from "./Controller";
 
-document.addEventListener("DOMContentLoaded", new Controller());
+$(function () {
+  new Controller().index();
+});

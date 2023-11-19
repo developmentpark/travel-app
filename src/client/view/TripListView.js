@@ -11,15 +11,20 @@ export default class TripListView {
         <ul class="section__content plans__list"></ul>
       </section>`);
 
-    this.planList = this.template.find(".plans_list");
+    this.planList = this.template.find(".plans__list");
 
-    $("#new-btn").click(function () {
-      this.controller.newTrip();
+    const self = this;
+    $(document).on("click", "#new-btn", function () {
+      self.controller.newTrip();
     });
   }
 
   render(list) {
-    list.forEach((item) => new ItemView().render(this.planList, item));
+    $("main").empty();
+    this.planList.empty();
+    list.forEach((item) =>
+      new ItemView(this.controller).render(this.planList, item),
+    );
     $("main").html(this.template);
   }
 }

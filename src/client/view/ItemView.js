@@ -19,25 +19,28 @@ export default class ItemView {
     this.deleteBtn = this.template.find("#delete-btn");
     this.detailBtn = this.template.find("#detail-btn");
 
-    this.deleteBtn.click(function (ev) {
-      this.controller.deleteTrip(ev.target.dataset.id);
+    const self = this;
+    this.deleteBtn.on("click", function (ev) {
+      ev.preventDefault();
+      self.controller.deleteTrip($(this).data("id"));
     });
 
-    this.detailBtn.click(function (ev) {
-      this.controller.detailTrip(ev.target.dataset.id);
+    this.detailBtn.on("click", function (ev) {
+      ev.preventDefault();
+      self.controller.detailTrip($(this).data("id"));
     });
   }
 
   render(root, { id, city, country, departing }) {
+    this.detailBtn.data("id", id);
+    this.deleteBtn.data("id", id);
+
     const _timeLeft = timeLeft(new Date(departing));
     const _city = capitalizeFirstLetter(city);
 
     this.description
       .html(`<span class="item__city">${_city}</span>, ${country} is
       <span class="item__time-left">${_timeLeft.value} ${_timeLeft.unit} away</span>`);
-
-    this.deleteBtn.attr("data-id", id);
-    this.detailBtn.attr("data-id", id);
 
     root.append(this.template);
   }
